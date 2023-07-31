@@ -1,3 +1,3 @@
-name: libsel4
-main: libsel4.zig
+name: seL4
+main: seL4.zig
 dependencies:
