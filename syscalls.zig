@@ -488,6 +488,41 @@ pub inline fn debugPutString(s: []const u8) void {
     }
 }
 
+// const format = @import("std").fmt.format;
+// const DebugWriter = struct {
+//     const Self = @This();
+//     pub fn writeAll(self: Self, bytes: []const u8) Error!void {
+//         _ = self;
+//         return debugPutString(bytes);
+//     }
+//     pub const Error = error{ Foo, Bar };
+// };
+// const debugWriter: DebugWriter = .{};
+
+// fn debugWriteAll(fmt: []const u8) !void {
+//     return debugPutString(fmt);
+// }
+
+const std = @import("std");
+const format = std.fmt.format;
+const Writer = std.io.Writer;
+
+const DebugWriteError = error{};
+const DebugWriteContext = struct {};
+
+fn debugWriteFn(context: DebugWriteContext, bytes: []const u8) DebugWriteError!usize {
+    _ = context;
+    debugPutString(bytes);
+    return bytes.len;
+}
+
+const DebugWriter = Writer(DebugWriteContext, DebugWriteError, debugWriteFn);
+const debugWriter: DebugWriter = .{ .context = .{} };
+
+pub fn debugPrint(comptime fmt: []const u8, args: anytype) void {
+    _ = format(debugWriter, fmt, args) catch noreturn;
+}
+
 pub inline fn debugDumpScheduler() void {
     var unused0: seL4.Word = 0;
     var unused1: seL4.Word = 0;
