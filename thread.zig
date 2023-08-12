@@ -1,6 +1,7 @@
 pub const seL4 = @import("./common.zig");
 
-pub extern threadlocal var __sel4_ipc_buffer: *seL4.IPCBuffer;
+// extern threadlocal var __sel4_ipc_buffer: *seL4.IPCBuffer;
+var __sel4_ipc_buffer: *seL4.IPCBuffer = undefined;
 
 pub fn setIPCBuffer(ipc_buffer: *seL4.IPCBuffer) void {
     __sel4_ipc_buffer = ipc_buffer;

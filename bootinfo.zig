@@ -17,6 +17,7 @@ const Caps = enum(u8) {
     capSMMUCBControl = 13,
     numInitialCaps = 14,
 };
+const thread = @import("./thread.zig");
 
 const NodeId = seL4.Word;
 const Domain = seL4.Word;
@@ -59,4 +60,5 @@ pub fn getBootInfo() *BootInfo {
 
 pub fn setBootInfo(boot_info: *BootInfo) void {
     __sel4_boot_info = boot_info;
+    thread.setIPCBuffer(boot_info.*.ipcBuffer);
 }
