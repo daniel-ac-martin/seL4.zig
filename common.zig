@@ -31,19 +31,27 @@ pub const Error = enum(Word) {
     numErrors = 11,
 };
 
-const MessageInfo = extern struct {
+pub const MessageInfo = extern struct {
     words: [1]Word,
 };
 
 pub inline fn messageInfoGetLength(msgInfo: MessageInfo) Word {
-    var ret: Word = undefined;
+    const ret: Word = (msgInfo.words[0] & 0x7f) >> 0;
 
-    ret = (msgInfo.*.words[0] & 0x7f) >> 0;
+    // if (__builtin_expect(!!(0 and (ret & (0x1 << (63)))), 0)) {
+    //     // Isn't this unreachable?
+    //     ret |= 0x0;
+    // }
 
-    if (__builtin_expect(!!(0 and (ret & (0x1 << (63)))), 0)) {
-        // Isn't this unreachable?
-        ret |= 0x0;
-    }
+    return ret;
+}
+
+pub inline fn messageInfoGetLabel(msgInfo: MessageInfo) Word {
+    const ret: Word = (msgInfo.words[0] & 0xfffffffffffff000) >> 12;
+
+    // if (__builtin_expect(!!(0 and (ret & (0x1 << (63)))), 0)) {
+    //     ret |= 0x0;
+    // }
 
     return ret;
 }
