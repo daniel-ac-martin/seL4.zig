@@ -5,13 +5,14 @@ const thread = @import("./thread.zig");
 // This file provides the seL4 system call API
 
 pub inline fn call(dest: seL4.CPtr, msgInfo: seL4.MessageInfo) seL4.MessageInfo {
+    var vdst: seL4.CPtr = dest;
     var info: seL4.MessageInfo = undefined;
     var mr0: seL4.Word = thread.getMR(0);
     var mr1: seL4.Word = thread.getMR(1);
     var mr2: seL4.Word = thread.getMR(2);
     var mr3: seL4.Word = thread.getMR(3);
 
-    sys.sendRecv(.call, dest, &dest, msgInfo.words[0], &info.words[0], &mr0, &mr1, &mr2, &mr3, 0);
+    sys.sendRecv(.call, dest, &vdst, msgInfo.words[0], &info.words[0], &mr0, &mr1, &mr2, &mr3, 0);
 
     thread.setMR(0, mr0);
     thread.setMR(1, mr1);
@@ -21,7 +22,8 @@ pub inline fn call(dest: seL4.CPtr, msgInfo: seL4.MessageInfo) seL4.MessageInfo 
     return info;
 }
 
-pub inline fn callWithMRs(dest: seL4.CPtr, msgInfo: seL4.MessageInfo, mr0: *seL4.Word, mr1: *seL4.Word, mr2: *seL4.Word, mr3: *seL4.Word) seL4.MessageInfo {
+pub inline fn callWithMRs(dest: seL4.CPtr, msgInfo: seL4.MessageInfo, mr0: ?*seL4.Word, mr1: ?*seL4.Word, mr2: ?*seL4.Word, mr3: ?*seL4.Word) seL4.MessageInfo {
+    var vdst: seL4.CPtr = dest;
     var info: seL4.MessageInfo = undefined;
     var msg0: seL4.Word = 0;
     var msg1: seL4.Word = 0;
@@ -29,31 +31,31 @@ pub inline fn callWithMRs(dest: seL4.CPtr, msgInfo: seL4.MessageInfo, mr0: *seL4
     var msg3: seL4.Word = 0;
 
     if ((mr0 != null) and (seL4.messageInfoGetLength(msgInfo) > 0)) {
-        msg0 = mr0.*;
+        msg0 = mr0.?.*;
     }
     if ((mr1 != null) and (seL4.messageInfoGetLength(msgInfo) > 1)) {
-        msg1 = mr1.*;
+        msg1 = mr1.?.*;
     }
     if ((mr2 != null) and (seL4.messageInfoGetLength(msgInfo) > 2)) {
-        msg2 = mr2.*;
+        msg2 = mr2.?.*;
     }
     if ((mr3 != null) and (seL4.messageInfoGetLength(msgInfo) > 3)) {
-        msg3 = mr3.*;
+        msg3 = mr3.?.*;
     }
 
-    sys.sendRecv(.call, dest, &dest, msgInfo.words[0], &info.words[0], &msg0, &msg1, &msg2, &msg3, 0);
+    sys.sendRecv(.call, dest, &vdst, msgInfo.words[0], &info.words[0], &msg0, &msg1, &msg2, &msg3, 0);
 
     if (mr0 != null) {
-        mr0.* = msg0;
+        mr0.?.* = msg0;
     }
     if (mr1 != null) {
-        mr1.* = msg1;
+        mr1.?.* = msg1;
     }
     if (mr2 != null) {
-        mr2.* = msg2;
+        mr2.?.* = msg2;
     }
     if (mr3 != null) {
-        mr3.* = msg3;
+        mr3.?.* = msg3;
     }
 
     return info;
