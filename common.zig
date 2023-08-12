@@ -15,6 +15,22 @@ pub const Word = switch (cpu_arch) {
 pub const CNode = Word;
 pub const CPtr = Word;
 
+pub const Error = enum(Word) {
+    noError = 0,
+    invalidArgument = 1,
+    invalidCapability = 2,
+    illegalOperation = 3,
+    rangeError = 4,
+    alignmentError = 5,
+    failedLookup = 6,
+    truncatedMessage = 7,
+    deleteFirst = 8,
+    revokeFirst = 9,
+    notEnoughMemory = 10,
+
+    numErrors = 11,
+};
+
 const MessageInfo = extern struct {
     words: [1]Word,
 };
