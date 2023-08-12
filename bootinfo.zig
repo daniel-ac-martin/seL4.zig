@@ -50,6 +50,7 @@ pub const BootInfo = extern struct {
     extraBIPages: SlotRegion,
     initThreadCNodeSizeBits: seL4.Word,
     initThreadDomain: Domain,
+    schedcontrol: SlotRegion, // MCS only
     untyped: SlotRegion,
     untypedList: [maxUntyped]UntypedDesc,
 };
