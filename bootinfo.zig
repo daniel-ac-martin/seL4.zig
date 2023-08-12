@@ -34,6 +34,8 @@ const UntypedDesc = extern struct {
     padding: [6]u8,
 };
 
+const maxUntyped = 230;
+
 pub const BootInfo = extern struct {
     extraLen: seL4.Word,
     nodeID: NodeId,
@@ -49,7 +51,7 @@ pub const BootInfo = extern struct {
     initThreadCNodeSizeBits: seL4.Word,
     initThreadDomain: Domain,
     untyped: SlotRegion,
-    untypedList: [230]UntypedDesc,
+    untypedList: [maxUntyped]UntypedDesc,
 };
 
 var __sel4_boot_info: *BootInfo = undefined;
