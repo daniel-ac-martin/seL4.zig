@@ -12,6 +12,7 @@ pub const Word = switch (cpu_arch) {
     else => @compileError("Unsupported CPU architecture."),
 };
 
+pub const CNode = Word;
 pub const CPtr = Word;
 
 const MessageInfo = extern struct {

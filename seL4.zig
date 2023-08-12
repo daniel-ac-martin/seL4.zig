@@ -1,3 +1,4 @@
+pub usingnamespace @import("./common.zig");
 pub usingnamespace @import("./bootinfo.zig");
 pub usingnamespace @import("./syscalls.zig");
 
