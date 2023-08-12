@@ -1,23 +1,6 @@
 const seL4 = @import("./common.zig");
 const debugPrint = @import("./syscalls.zig").debugPrint;
 
-const Caps = enum(u8) {
-    capNull = 0,
-    capInitThreadTCB = 1,
-    capInitThreadCNode = 2,
-    capInitThreadVSpace = 3,
-    capIRQControl = 4,
-    capASIDControl = 5,
-    capInitThreadASIDPool = 6,
-    capIOPortControl = 7,
-    capIOSpace = 8,
-    capBootInfoFrame = 9,
-    capInitThreadIPCBuffer = 10,
-    capDomain = 11,
-    capSMMUSIDControl = 12,
-    capSMMUCBControl = 13,
-    numInitialCaps = 14,
-};
 const thread = @import("./thread.zig");
 
 const NodeId = seL4.Word;
