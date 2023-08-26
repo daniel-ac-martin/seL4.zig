@@ -87,6 +87,6 @@ SECTIONS
     .note.GNU-stack (NOLOAD):
     {
          *(.note.GNU-stack)
-    } : gnu-stack
+    } : gnu_stack
 }
 
