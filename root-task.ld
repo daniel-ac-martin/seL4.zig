@@ -32,6 +32,7 @@ PHDRS
     headers PT_PHDR PHDRS ;
     text PT_LOAD FILEHDR PHDRS ;
     rodata PT_LOAD ;
+    tdata PT_TLS;
     data PT_LOAD ;
     gnu_stack PT_GNU_STACK ;
 }
@@ -66,7 +67,7 @@ SECTIONS
         _tdata = . ;
         *(.tdata .tdata.*)
         _tdata_end = . ;
-    } :data
+    } :tdata
 
     .bss : ALIGN(4K)
     {
@@ -82,7 +83,7 @@ SECTIONS
         *(.tbss .tbss.*)
         *(.tcommon .tcommon.*)
         _tbss_end = . ;
-    } :data
+    } :tdata
 
     .note.GNU-stack (NOLOAD):
     {
