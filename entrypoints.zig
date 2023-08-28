@@ -1,5 +1,7 @@
+const c = @import("./c-library.zig");
 const seL4 = @import("./common.zig");
 const bi = @import("./bootinfo.zig");
+const cpu_arch = @import("builtin").cpu.arch;
 
 // Entry-points into seL4 applications
 // The root-task needs a special entry point and should be linked with `-e _boot`.
@@ -29,7 +31,7 @@ export fn _boot() callconv(.Naked) noreturn {
     // Grab boot info
     //@export(stack_bytes_slice, .{ .name = "__stack_top" });
     //@export(boot, .{ .name = "__sel4_start_root" });
-    switch (seL4.cpu_arch) {
+    switch (cpu_arch) {
         .aarch64 => asm volatile (
             \\ldr x19, =__stack_top
             \\add sp, x19, #0
@@ -56,14 +58,16 @@ export fn _boot() callconv(.Naked) noreturn {
     while (true) {}
 }
 
-export fn __boot(boot_info: *bi.BootInfo) callconv(.C) void {
-    bi.setBootInfo(boot_info);
+export fn __boot(boot_info: *seL4.BootInfo) callconv(.C) void {
+    c.seL4_SetIPCBuffer(boot_info.*.ipcBuffer);
+    c.seL4_InitBootInfo(boot_info);
+    // bi.setBootInfo(boot_info);
     main();
 }
 
 // Entry-point for standard tasks
 export fn _start() callconv(.Naked) noreturn {
-    switch (seL4.cpu_arch) {
+    switch (cpu_arch) {
         .aarch64 => asm volatile (
             \\mov fp, #0
             \\mov lr, #0
