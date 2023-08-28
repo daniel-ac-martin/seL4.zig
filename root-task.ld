@@ -23,7 +23,7 @@ SECTIONS
         _stack_end = . ;
     } :data
 }
-INSERT AFTER .tbss;
+INSERT AFTER .bss;
 
 /* INCLUDE ./linker.ld */
 
