@@ -54,13 +54,13 @@ pub fn print(comptime fmt: []const u8, args: anytype) void {
 pub fn printBootInfo(boot_info: *seL4.BootInfo) void {
     print("Node {d} of {d}\n", .{ boot_info.*.nodeID, boot_info.*.numNodes });
     print("IOPT levels:     {d}\n", .{boot_info.*.numIOPTLevels});
-    print("IPC buffer:      {}\n", .{boot_info.*.ipcBuffer});
+    print("IPC buffer:      {}\n", .{boot_info.*.ipcBuffer.*});
     print("\n", .{});
     print("sharedFrames:    [{d} --> {d})\n", .{ boot_info.*.sharedFrames.start, boot_info.*.sharedFrames.end });
     print("ioSpaceCaps:     [{d} --> {d})\n", .{ boot_info.*.ioSpaceCaps.start, boot_info.*.ioSpaceCaps.end });
-    print("schedcontrol:     [{d} --> {d})\n", .{ boot_info.*.schedcontrol.start, boot_info.*.schedcontrol.end });
+    print("schedcontrol:    [{d} --> {d})\n", .{ boot_info.*.schedcontrol.start, boot_info.*.schedcontrol.end });
     print("userImagePaging: [{d} --> {d})\n", .{ boot_info.*.userImagePaging.start, boot_info.*.userImagePaging.end });
-    print("extraBIPages:     [{d} --> {d})\n", .{ boot_info.*.extraBIPages.start, boot_info.*.extraBIPages.end });
+    print("extraBIPages:    [{d} --> {d})\n", .{ boot_info.*.extraBIPages.start, boot_info.*.extraBIPages.end });
     print("userImageFrames: [{d} --> {d})\n", .{ boot_info.*.userImageFrames.start, boot_info.*.userImageFrames.end });
     print("untypeds:        [{d} --> {d})\n", .{ boot_info.*.untyped.start, boot_info.*.untyped.end });
     print("Empty slots:     [{d} --> {d})\n", .{ boot_info.*.empty.start, boot_info.*.empty.end });
