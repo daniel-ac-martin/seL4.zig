@@ -1,6 +1,5 @@
 const c = @import("./c-library.zig");
 const seL4 = @import("./common.zig");
-const bi = @import("./bootinfo.zig");
 const cpu_arch = @import("builtin").cpu.arch;
 
 // Entry-points into seL4 applications
@@ -61,7 +60,6 @@ export fn _boot() callconv(.Naked) noreturn {
 export fn __boot(boot_info: *seL4.BootInfo) callconv(.C) void {
     c.seL4_SetIPCBuffer(boot_info.*.ipcBuffer);
     c.seL4_InitBootInfo(boot_info);
-    // bi.setBootInfo(boot_info);
     main();
 }
 

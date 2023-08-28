@@ -1,21 +1,5 @@
 const c = @import("../c-library.zig");
 const seL4 = @import("../common.zig");
-
-// const format = @import("std").fmt.format;
-// const DebugWriter = struct {
-//     const Self = @This();
-//     pub fn writeAll(self: Self, bytes: []const u8) Error!void {
-//         _ = self;
-//         return debugPutString(bytes);
-//     }
-//     pub const Error = error{ Foo, Bar };
-// };
-// const debugWriter: DebugWriter = .{};
-
-// fn debugWriteAll(fmt: []const u8) !void {
-//     return debugPutString(fmt);
-// }
-
 const std = @import("std");
 const format = std.fmt.format;
 const Writer = std.io.Writer;
@@ -23,12 +7,12 @@ const Writer = std.io.Writer;
 const DebugWriteError = error{};
 const DebugWriteContext = struct {};
 
+const unsupported = "System call is not supported under this configuration";
+
 pub inline fn putChar(ch: u8) void {
     if (@hasDecl(c, "seL4_DebugPutChar")) {
         return c.seL4_DebugPutChar(ch);
-    } else {
-        @compileError("System call is not supported under this configuration");
-    }
+    } else @compileError(unsupported);
 }
 
 pub inline fn putString(s: []const u8) void {
@@ -97,39 +81,29 @@ pub fn printBootInfo(boot_info: *seL4.BootInfo) void {
 pub inline fn dumpScheduler() void {
     if (@hasDecl(c, "seL4_DebugDumpScheduler")) {
         return c.seL4_DebugDumpScheduler();
-    } else {
-        @compileError("System call is not supported under this configuration");
-    }
+    } else @compileError(unsupported);
 }
 
 pub inline fn halt() void {
     if (@hasDecl(c, "seL4_DebugHalt")) {
         return c.seL4_DebugHalt();
-    } else {
-        @compileError("System call is not supported under this configuration");
-    }
+    } else @compileError(unsupported);
 }
 
 pub inline fn snapshot() void {
     if (@hasDecl(c, "seL4_DebugSnapshot")) {
         return c.seL4_DebugSnapshot();
-    } else {
-        @compileError("System call is not supported under this configuration");
-    }
+    } else @compileError(unsupported);
 }
 
 pub inline fn capIdentify(cap: seL4.CPtr) u32 {
     if (@hasDecl(c, "seL4_DebugCapIdentify")) {
         return c.seL4_DebugCapIdentify(cap);
-    } else {
-        @compileError("System call is not supported under this configuration");
-    }
+    } else @compileError(unsupported);
 }
 
 pub inline fn nameThread(tcb: seL4.CPtr, name: []const u8) void {
     if (@hasDecl(c, "seL4_DebugNameThread")) {
         return c.seL4_DebugNameThread(tcb, name);
-    } else {
-        @compileError("System call is not supported under this configuration");
-    }
+    } else @compileError(unsupported);
 }
